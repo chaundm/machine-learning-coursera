@@ -28,7 +28,7 @@ def displayData(X, example_width=None):
 
 	# Compute rows, cols
 	m, n = X.shape
-	example_height = n / example_width
+	example_height = int(n / example_width)
 
 	# Compute number of items to display
 	display_rows = int(math.floor(math.sqrt(m)))
