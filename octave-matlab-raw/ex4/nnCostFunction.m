@@ -68,14 +68,20 @@ y_temp = zeros(m, num_labels);
 for i = 1:num_labels
     y_temp(:,i) = y == i;
 end
-y = y_temp;
-X = [ones(m,1) X]; % X = m x (n+1); Theta1 = L x (n+1)
-a2 = sigmoid(X*Theta1'); % a2 = m x L
-a2 = [ones(m,1) a2]; % a2 = m x (L+1); Theta2 = K x (L+1)
-% y = m x K; 
+y = y_temp; %create matrix binary y = m x K
 
-J = 1/m*trace(-y'*log(sigmoid(a2*Theta2')) ...
-    - (1-y')*log(1-sigmoid(a2*Theta2')));
+X = [ones(m,1) X]; % X = m x (n+1); Theta1 = L x (n+1)
+a1 = X; % a1 = m x (n+1)
+
+z2 = X*Theta1'; % z2 = m x L
+a2 = sigmoid(z2); % a2 = m x L
+a2 = [ones(m,1) a2]; % a2 = m x (L+1); Theta2 = K x (L+1)
+
+z3 = a2*Theta2';
+a3 = sigmoid(z3); % a3 = m x K
+
+J = 1/m*trace(-y'*log(a3) ...
+    - (1-y')*log(1-a3));
 
 %% PART II - regularized
 
@@ -86,14 +92,8 @@ J = J + lambda/(2*m)*(sum(Matrix1(:)) + sum(Matrix2(:)));
 
 %% PART III - gradient
 %Step1
-a1 = X; % a1 = m x (n+1)
 
-z2 = X*Theta1'; % z2 = m x L
-a2 = sigmoid(z2);
-a2 = [ones(m,1) a2]; % a2 = m x (L+1)
-
-z3 = a2*Theta2';
-a3 = sigmoid(z3); % a3 = m x K
+%Done 
 
 %Step2
 delta3 = a3 - y; % delta3 = m x K
